@@ -1,0 +1,41 @@
+{
+    "name": "msppack/outlook-calendar",
+    "keywords": ["Calendar"],
+    "description": "calendar",
+    "authors": [
+        {
+            "name": "Manoj Sonagra",
+            "email": "manoj30808@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MspPack\\OutLookCalendar\\": "src"
+        }
+    },
+     "scripts": {
+        "post-create-project-cmd": [
+            "php artisan migrate",
+            "php artisan vendor:publish"
+        ],
+        "post-install-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "php artisan optimize"
+        ],
+        "post-update-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan optimize"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MspPack\\OutLookCalendar\\OutLookCalendarServiceProvider"
+            ]
+        }
+    }
+
+}
