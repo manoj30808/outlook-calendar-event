@@ -272,7 +272,47 @@ use DateTimeZone;
         return $response;
       }
     }
-    
+    // Use the Calendar API to add an event to the default calendar.
+    public static function updateEventToCalendar($access_token, $subject,$event_id='') {
+      if (!empty($event_id)) {
+        // Generate the JSON payload
+        $event = array(
+          "Subject" => $subject);
+        
+        $eventPayload = json_encode($event);
+        error_log("EVENT PAYLOAD: ".$eventPayload);
+        
+        $createEventUrl = self::$outlookApiUrl."/Me/Events/".$event_id;
+        
+        $response = self::makeApiCall($access_token, "PATCH", $createEventUrl, $eventPayload);
+        
+        // If the call succeeded, the response should be a JSON representation of the
+        // new event. Try getting the Id property and return it.
+        if ($response['Id']) {
+          return $response['Id'];
+        }
+        
+        else {
+          error_log("ERROR: ".$response);
+          return $response;
+        }
+      }
+      return 'TRUE';
+    }
+
+    // Use the Calendar API to add an event to the default calendar.
+    public static function deleteEventToCalendar($access_token,$event_id='') {
+      if (!empty($event_id)) {
+        
+        // Generate the JSON payload
+        $createEventUrl = self::$outlookApiUrl."/Me/Events/".$event_id;
+        
+        $response = self::makeApiCall($access_token, "DELETE", $createEventUrl);
+        
+        return 'TRUE';
+      }
+      return 'TRUE';
+    }
     // Use the Calendar API to add an attachment to an event.
     public static function addAttachmentToEvent($access_token, $eventId, $attachmentData) {
       // Generate the JSON payload

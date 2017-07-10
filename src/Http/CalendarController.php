@@ -53,6 +53,37 @@ class CalendarController extends Controller
 
         return 'Fail';
     }
+    public function update(Request $request,$id)
+    {
+        $calendar_event_details = Calendar::where('id','=',$id)
+                                  ->where('user_id','=',Auth::user()->id)
+                                  ->first();
+
+        if(!empty($calendar_event_details)){
+            Calendar::where('id','=',$id)->update(['title'=>$request->title]);
+            
+            $event = Office365Service::updateEventToCalendar(Session::get('accessToken'), $request->title,$calendar_event_details->g_event_id);  
+
+            return 'Success';
+        }
+        return 'Fail';
+    }
+
+    public function destroy(Request $request,$id)
+    {
+        $calendar_event_details = Calendar::where('id','=',$id)
+                                  ->where('user_id','=',Auth::user()->id)
+                                  ->first();
+
+        if(!empty($calendar_event_details)){
+            //DELETE OUTLOOK EVENT
+            $event = Office365Service::deleteEventToCalendar(Session::get('accessToken'), $calendar_event_details->g_event_id);  
+            
+            Calendar::find($id)->delete();
+            return 'Success';
+        }
+        return 'Fail';
+    }
 
     public function login(Request $request)
     {
