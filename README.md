@@ -7,7 +7,7 @@
 	4) php artisan migrate
 
 This will publish file called `laravel-outlook-calendar.php` in your config-directory with this contents:
-```
+```php
 <?php
 
 return [
